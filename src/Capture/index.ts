@@ -1,8 +1,9 @@
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import Utils from "../utils";
+import { ReceiptResponse } from "./types";
 
 export default class Capture {
-  private publishUrl: string = "https://67vm38cq09.execute-api.us-east-2.amazonaws.com/receipt";
+  private publishUrl: string = " https://publish.mytiki.com/latest";
 
   /**
    * Uses Capacitor to capture a picture with the device's camera or select a photo from the gallery.
@@ -40,7 +41,7 @@ export default class Capture {
 
     for (const image of images) {
       const body = Utils.base64toBlob(image, "image/jpeg");
-      const url = `${this.publishUrl}/id/${id}`;
+      const url = `${this.publishUrl}/receipt/${id}`;
 
       const response = await fetch(url, {
         method: "PUT",
@@ -55,5 +56,17 @@ export default class Capture {
     }
 
     return id;
+  }
+
+  public async getReceipt(receiptId: string, token: string): Promise<ReceiptResponse[]>{
+    const url = `${this.publishUrl}/receipt/${receiptId}`
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("Authorization", "Bearer " + token);
+    const options = {
+        method: "GET",
+        headers,
+      };
+    return (await fetch(url, options)).json()
   }
 }

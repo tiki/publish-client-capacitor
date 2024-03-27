@@ -8,8 +8,7 @@ import {
 import terms from '../assets/terms.md?raw';
 
 export default class License {
-  private baseUrl: string =
-    "https://corsproxy.io/?" + encodeURIComponent("https://postman-echo.com");
+  private licenseUrl: string = "https://trail.mytiki.com/latest";
   private utils = new Utils();
 
   /**
@@ -22,7 +21,7 @@ export default class License {
     token: string,
     postLicenseRequest: PostLicenseRequest
   ): Promise<PostLicenseRequest> {
-    const url = `${this.baseUrl}/${"post"}`;
+    const url = `${this.licenseUrl}/license/create`;
     return this.utils.handleRequest<PostLicenseRequest>(
       url,
       "POST",
@@ -30,18 +29,7 @@ export default class License {
       postLicenseRequest
     );
   }
-
-  /**
-   * Retrieves all licenses created for a given address.
-   * @param {string} id - The Pointer Record used to identify the licenses. It should be the User ID.
-   * @param {string} token - The address token.
-   * @returns {RspLicenses} An object containing an array of licenses and a request ID.
-   */
-  public async get(id: string, token: string): Promise<RspLicenses> {
-    const url = `${this.baseUrl}/${"get"}?id=${id}`;
-    return this.utils.handleRequest<RspLicenses>(url, "GET", token);
-  }
-
+  
   /**
    * Verify if a license is valid or not
    * @param {PostGuardRequest} postGuardRequest - An Object containing the pointer record and usecases of a license, the ptr will be use to identify the license
@@ -52,7 +40,7 @@ export default class License {
     postGuardRequest: PostGuardRequest,
     token: string
   ): Promise<RspGuard> {
-    const url = `${this.baseUrl}/post`;
+    const url = `${this.licenseUrl}/license/verify`;
     return this.utils.handleRequest<RspGuard>(
       url,
       "POST",
